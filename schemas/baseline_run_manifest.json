@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traceanchor.local/schemas/baseline_run_manifest.json",
+  "title": "TraceAnchor Baseline Run Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "run_nonce",
+    "method_id",
+    "method_kind",
+    "method_hash",
+    "partition",
+    "status",
+    "config_sha256",
+    "decision_record_sha256",
+    "deviation_marker_sha256",
+    "ordinary_gate_passed",
+    "ordinary_gate_threshold",
+    "wp7_deviation_entry_threshold",
+    "wp7_deviation_entry_passed",
+    "agent_test_accessed",
+    "external_provider_calls",
+    "cost_rmb",
+    "historical_artifacts_preserved",
+    "fairness"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "run_id": {"type": "string", "pattern": "^wp7_[a-f0-9]{24}$"},
+    "run_nonce": {"type": "string", "minLength": 1, "maxLength": 128},
+    "method_id": {
+      "enum": [
+        "logistic_regression", "hist_gradient_boosting", "xgboost",
+        "shallow_1d_cnn", "network_dctn", "host_dctn",
+        "deterministic_or_router", "rule_correlator", "static_context_llm",
+        "fixed_workflow_agent", "single_tool_agent",
+        "multi_agent_no_verifier", "traceanchor_full"
+      ]
+    },
+    "method_kind": {"enum": ["detection", "investigation"]},
+    "method_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "partition": {
+      "enum": [
+        "synthetic_offline", "trigger_train", "trigger_validation",
+        "trigger_test", "agent_development", "agent_test"
+      ]
+    },
+    "status": {"enum": ["planned", "running", "completed", "failed"]},
+    "config_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "decision_record_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "deviation_marker_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "ordinary_gate_passed": {"const": false},
+    "ordinary_gate_threshold": {"const": 0.95},
+    "wp7_deviation_entry_threshold": {"const": 0.9},
+    "wp7_deviation_entry_passed": {"const": true},
+    "agent_test_accessed": {"const": false},
+    "external_provider_calls": {"const": 0},
+    "cost_rmb": {"type": "number", "minimum": 0},
+    "historical_artifacts_preserved": {"const": true},
+    "input_inventory_sha256": {
+      "anyOf": [
+        {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        {"type": "null"}
+      ]
+    },
+    "output_sha256": {
+      "anyOf": [
+        {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        {"type": "null"}
+      ]
+    },
+    "errors": {"type": "array", "items": {"type": "string"}},
+    "fairness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_ledger_sha256", "output_schema_sha256", "max_tool_calls",
+        "max_output_tokens", "max_external_context_bytes", "max_cost_rmb",
+        "same_split", "same_blind_ledger", "same_gold_boundary"
+      ],
+      "properties": {
+        "evidence_ledger_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "output_schema_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "max_tool_calls": {"type": "integer", "minimum": 0, "maximum": 24},
+        "max_output_tokens": {"type": "integer", "minimum": 0, "maximum": 3000},
+        "max_external_context_bytes": {"type": "integer", "minimum": 0, "maximum": 65536},
+        "max_cost_rmb": {"type": "number", "minimum": 0},
+        "same_split": {"const": true},
+        "same_blind_ledger": {"const": true},
+        "same_gold_boundary": {"const": true}
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+Combine investigator findings through cross-modal join, timeline, and ATT&CK
+retrieval tools. Produce a claim-evidence graph with typed relations. Do not
+invent missing entities, Evidence IDs, techniques, causal links, or response
+actions. Response considerations must always set execute=false.

@@ -1,0 +1,9 @@
+Minimax:
+  primary:
+    provider: openai_compatible
+    model: MiniMax-M2.5
+    api_key_env: TRACEWEAVER_ALIYUN_API_KEY
+    base_url_env: TRACEWEAVER_ALIYUN_BASE_URL
+    cost_rmb_per_million_input_tokens: 2
+    cost_rmb_per_million_output_tokens: 8
+    response_format: json_object

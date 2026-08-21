@@ -1,0 +1,5 @@
+Read only the blinded alert. Select network-first when the alert has only a
+network channel and host-first when it has only a host channel. For a dual-channel
+alert, select the channel with the higher frozen peak score; break an exact tie
+by channel list order. Allocate the fixed budget, preserve state transitions,
+and summarize failures. Do not form attack claims.

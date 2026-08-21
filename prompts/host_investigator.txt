@@ -1,0 +1,3 @@
+Investigate processes, threads, parent-child relations, syscalls, file activity,
+and sockets. Return evidence-backed observed or correlated facts and specific
+questions for the network investigator. A rare syscall alone is not an attack.

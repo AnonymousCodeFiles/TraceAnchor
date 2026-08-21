@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://traceanchor.local/schemas/claim_evidence.json",
+  "title": "TraceAnchor Final Claim-Evidence Output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "incident_summary",
+    "root_cause_candidates",
+    "steps",
+    "attack_techniques",
+    "evidence_gaps",
+    "response_considerations",
+    "verifier"
+  ],
+  "properties": {
+    "incident_summary": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "root_cause_candidates": {
+      "type": "array",
+      "maxItems": 20,
+      "items": {"$ref": "#/$defs/root_cause"}
+    },
+    "steps": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {"$ref": "#/$defs/step"}
+    },
+    "attack_techniques": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {"$ref": "#/$defs/technique"}
+    },
+    "evidence_gaps": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {"type": "string"}
+    },
+    "response_considerations": {
+      "type": "array",
+      "maxItems": 50,
+      "items": {"$ref": "#/$defs/response"}
+    },
+    "verifier": {"$ref": "#/$defs/verifier"}
+  },
+  "$defs": {
+    "evidence_ids": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 200,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^(?:sc|pcap|res):tw_[0-9a-f]{24}:[^:]+(?::[0-9]+)?$"
+      }
+    },
+    "root_cause": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["entity_id", "rank", "evidence_ids", "confidence"],
+      "properties": {
+        "entity_id": {"type": "string", "pattern": "^ent_[0-9a-f]{24}$"},
+        "rank": {"type": "integer", "minimum": 1},
+        "evidence_ids": {"$ref": "#/$defs/evidence_ids"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step_id", "start_ts", "end_ts", "claim", "relation_type", "evidence_ids", "confidence"],
+      "properties": {
+        "step_id": {"type": "string", "pattern": "^S[1-9][0-9]*$"},
+        "start_ts": {"type": "integer", "minimum": 0},
+        "end_ts": {"type": "integer", "minimum": 0},
+        "claim": {"type": "string", "minLength": 1, "maxLength": 1500},
+        "relation_type": {"enum": ["observed", "correlated", "possibly_causal"]},
+        "evidence_ids": {"$ref": "#/$defs/evidence_ids"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "technique": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["technique_id", "evidence_ids", "confidence"],
+      "properties": {
+        "technique_id": {"type": "string", "pattern": "^T[0-9]{4}(?:\\.[0-9]{3})?$"},
+        "evidence_ids": {"$ref": "#/$defs/evidence_ids"},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["suggestion", "evidence_ids", "risk", "execute"],
+      "properties": {
+        "suggestion": {"type": "string", "minLength": 1, "maxLength": 1000},
+        "evidence_ids": {"$ref": "#/$defs/evidence_ids"},
+        "risk": {"type": "string", "minLength": 1, "maxLength": 500},
+        "execute": {"const": false}
+      }
+    },
+    "verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "removed_claims", "unsupported_claim_rate"],
+      "properties": {
+        "decision": {"enum": ["supported", "partially_supported", "insufficient_evidence"]},
+        "removed_claims": {"type": "array", "maxItems": 200, "items": {"type": "string"}},
+        "unsupported_claim_rate": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }
+  }
+}

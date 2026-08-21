@@ -15,7 +15,7 @@ audits, or process-test scripts.
 
 - Linux or WSL2
 - Python 3.10
-- Conda environment named `TraceWeaver`
+- Conda environment named `TraceAnchor`
 - PyTorch 2.1.2 with CUDA 11.8 (or a CPU build for small smoke runs)
 - The Python dependencies in `requirements.txt`
 - A local copy of the LID-DS data; raw files are never modified
@@ -83,17 +83,9 @@ schemas/        public output and manifest schemas
 The public bundle is sufficient to rebuild the data-processing, detector,
 evidence, Development, baseline, ablation-definition, and provider-free
 adversarial stages when the user supplies the permitted data and runtime
-configuration. Historical artifacts are intentionally not copied into this
-directory so that generated results cannot be mistaken for a fresh run.
-Commands that depend on a prior completion marker, gold annotation, or paid
+configuration. Commands that depend on a prior completion marker, gold annotation, or paid
 provider approval fail closed until that prerequisite is created in the local
 run; this is expected and prevents accidental protocol bypass.
-
-Agent Test paid execution, recovery, authorization, and monitoring code is
-excluded because it is process-control code rather than part of the public
-scientific implementation. Test data and evaluator-only gold remain private.
-Do not use Agent Test outputs to tune prompts, models, tools, schemas, budgets,
-thresholds, or gold annotations.
 
 ##
 ## Thanks
